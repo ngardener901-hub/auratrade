@@ -148,6 +148,19 @@ regime = classify_regime(dow)
 regime_ctx = get_regime_context(regime)
 
 regime_color = "🟦" if regime == "BLUE" else "🟥"
+if regime == "NO_TRADE":
+    regime_color = "⬛"
+
+# ─── Weekend / Holiday Banner ────────────────────────────────────────────────
+if regime == "NO_TRADE":
+    st.error("""
+    ## ⬛ MARKET CLOSED — AuraTrade in Standby
+    Trading is disabled on weekends and holidays. The system will resume active scanning at Monday 09:30 ET.
+    
+    **Next session:** Monday, {next_monday.strftime('%B %d')} | **Regime:** RED (Trap & Revert)
+    """.format(next_monday=datetime.now(EASTERN) + timedelta(days=(7 - datetime.now(EASTERN).weekday()) % 7)))
+    st.stop()  # Halt further execution — no signals, no entries, no FVG scanning
+
 with col1:
     st.metric(
         label=f"{regime_color} Regime",

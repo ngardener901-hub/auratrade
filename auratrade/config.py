@@ -12,8 +12,8 @@ from enum import Enum
 
 
 class Regime(Enum):
-    BLUE = "BLUE"         # Tue/Wed/Thu — Trend Runner
-    RED = "RED"           # Mon/Fri — Trap & Revert
+    BLUE = "BLUE"     # Tue/Wed/Thu — Trend Runner
+    RED = "RED"       # Mon/Fri — Trap & Revert
     NO_TRADE = "NO_TRADE"  # Weekend / Holiday — Market Closed
 
 
@@ -45,13 +45,13 @@ MARKET_CLOSE_MINUTE: int = 0
 # ─── Regime Mapping ──────────────────────────────────────────────────────────
 
 REGIME_BY_DAY: Dict[int, Regime] = {
-    0: Regime.RED,        # Monday
-    1: Regime.BLUE,       # Tuesday
-    2: Regime.BLUE,       # Wednesday
-    3: Regime.BLUE,       # Thursday
-    4: Regime.RED,        # Friday
-    5: Regime.NO_TRADE,   # Saturday — Market closed
-    6: Regime.NO_TRADE,   # Sunday — Market closed
+    0: Regime.RED,     # Monday
+    1: Regime.BLUE,    # Tuesday
+    2: Regime.BLUE,    # Wednesday
+    3: Regime.BLUE,    # Thursday
+    4: Regime.RED,     # Friday
+    5: Regime.NO_TRADE,  # Saturday — Market closed
+    6: Regime.NO_TRADE,  # Sunday — Market closed
 }
 
 # ─── FVG Detection Parameters ────────────────────────────────────────────────
@@ -180,57 +180,6 @@ REGIME_CONTEXT: Dict[str, Dict[str, any]] = {
         "confidence_boost": 0.0,
         "contract_limit_multiplier": 0.0,     # Zero contracts allowed
         "can_trade": False,
-    },
-}
-
-# ─── Key Levels (Session-Based) ──────────────────────────────────────────────
-
-LEVEL_NAMES: List[str] = [
-    "London_High",
-    "London_Low",
-    "PreMarket_High",
-    "PreMarket_Low",
-    "Prev_NYAM_High",
-    "Prev_NYAM_Low",
-    "Prev_Session_High",
-    "Prev_Session_Low",
-    "Overnight_High",
-    "Overnight_Low",
-]
-
-# ─── Logging ─────────────────────────────────────────────────────────────────
-
-LOG_LEVEL: str = "INFO"
-LOG_FORMAT: str = "%(asctime)s | %(name)s | %(levelname)s | %(message)s"
-
-# ─── Helper Functions ────────────────────────────────────────────────────────
-
-def get_regime_by_day(day_of_week: int) -> Regime:
-    """Return the default regime for a given day of week (0=Monday … 6=Sunday)."""
-    return REGIME_BY_DAY.get(day_of_week, Regime.RED)
-
-
-def get_max_contracts(product: str) -> int:
-    """Return max allowed contracts for a product."""
-    return PRODUCT_SPECS.get(product, {}).get("max_contracts", 1)
-
-
-def get_regime_context(regime: str) -> Dict[str, any]:
-    """Return the trading-rule context for a regime string."""
-    return REGIME_CONTEXT.get(regime, REGIME_CONTEXT["RED"])
-
-
-def tick_size(product: str) -> float:
-    """Return tick size for a product."""
-    return PRODUCT_SPECS.get(product, {}).get("tick_size", 0.25)
-
-
-def tick_value(product: str) -> float:
-    """Return USD value per tick for a product."""
-    return PRODUCT_SPECS.get(product, {}).get("tick_value", 0.50)        "entry_bias": "counter_trend",
-        "tight_stops": True,
-        "confidence_boost": 0.05,
-        "contract_limit_multiplier": 0.5,     # Half-size position limits
     },
 }
 
